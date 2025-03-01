@@ -1,0 +1,57 @@
+<style>
+    body {
+        background: linear-gradient(120deg, #1a1a2e, #16213e, #0f3460);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        overflow: hidden;
+    }
+    .floating {
+        position: absolute;
+        width: 200px;
+        height: 200px;
+        background: radial-gradient(circle, #ffcc00, #ff6600);
+        border-radius: 50%;
+        opacity: 0.6;
+        animation: float 5s infinite alternate ease-in-out;
+    }
+    @keyframes float {
+        from { transform: translateY(-20px); }
+        to { transform: translateY(20px); }
+    }
+    .floating:nth-child(1) { top: 10%; left: 10%; animation-duration: 6s; }
+    .floating:nth-child(2) { top: 70%; left: 80%; animation-duration: 4s; }
+    .cool-text {
+        font-size: 2.5rem;
+        font-weight: bold;
+        background: linear-gradient(to right, #ffcc00, #ff6600);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 3px 3px 10px rgba(255, 204, 0, 0.5);
+    }
+</style>
+<div class="floating"></div>
+<div class="floating"></div>
+
+<div class="absolute bottom-5 left-1/2 transform -translate-x-1/2 text-white text-center cursor-pointer" onclick="toggleUpdates()">
+    <p class="bg-gradient-to-r from-blue-500 to-purple-500 px-8 py-4 rounded-lg shadow-lg font-extrabold text-2xl hover:scale-110 transition-transform">🚀 Future Updates</p>
+    <div id="update-list" class="hidden mt-4 bg-gray-900 p-6 rounded-lg shadow-lg text-left w-80">
+        <ul class="list-disc list-inside text-gray-300 text-lg">
+            <li>✨ Dark Mode Toggle</li>
+            <li>🎨 Custom QR Styles</li>
+            <li>🔗 More Integrations</li>
+            <li>🖌️ Better UI Enhancements</li>
+            <li>🌍 Multi-language Support</li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    function toggleUpdates() {
+        const updateList = document.getElementById("update-list");
+        updateList.classList.toggle("hidden");
+    }
+</script>
+</body

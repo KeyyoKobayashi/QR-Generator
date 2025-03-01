@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: radial-gradient(circle at 50% 40%, #222, #000);
+            overflow: hidden;
+            position: relative;
+        }
+        .moon {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle at 30% 30%, #fff, #ccc);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            transform: translateX(-50%);
+            z-index: -1;
+        }
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+        .stars span {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            opacity: 0.8;
+            animation: twinkle 3s infinite ease-in-out alternate;
+        }
+        @keyframes twinkle {
+            from { opacity: 0.5; }
+            to { opacity: 1; }
+        }
+        .moving-text {
+            position: absolute;
+            top: 10%;
+            left: 50%;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            transform: translateX(-50%);
+            animation: moveText 3s infinite alternate ease-in-out;
+            z-index: 1;
+        }
+        .moving-text span {
+            color: #25D366;
+        }
+        @keyframes moveText {
+            from { transform: translate(-50%, 0); }
+            to { transform: translate(-50%, 10px); }
+        }
+    </style>
+</head>
+<body class="text-white flex flex-col justify-center items-center h-screen relative">
+    <div class="moon"></div>
+    <div class="stars"></div>
+    <div class="moving-text">QR <span>WhatsApp</span></div>
+    <div class="container bg-gray-800 p-6 rounded-lg shadow-lg w-96 text-center z-10">
+        <h1 class="text-2xl font-bold mb-4">QR Code Generator</h1>
+        <input type="text" id="contactName" placeholder="Enter Contact Name" class="w-full p-2 rounded text-black mb-2" />
+        <input type="text" id="whatsappNumber" placeholder="Enter WhatsApp Number" class="w-full p-2 rounded text-black" />
+        <p id="warningText" class="text-red-500 hidden text-sm mt-2">Please fill name and number before continuing</p>
+        <button onclick="generateQR()" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generate QR</button>
+        <div id="qrcode" class="mt-4 flex justify-center"></div>
+        <img id="qrImage" class="hidden mt-4 mx-auto" />
+        <button id="openWhatsapp" class="hidden mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="openWhatsApp()">Open in WhatsApp</button>
+        <button id="downloadQR" class="hidden mt-4 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" onclick="downloadQRCode()">Download QR</button>
+    </div>
+    <p class="footer mt-6 text-lg font-semibold text-gray-400">QR Code Generator by <a href="https://wa.me/60149358422" target="_blank" class="text-blue-400 hover:underline">Chriss Jericho</a></p>
+    <a href="futureUP.html" target="_blank" class="text-blue-400 hover:underline">Future Update</a></p>
+    
+    <script>
+        function generateQR() {
+            let name = document.getElementById('contactName').value.trim();
+            let number = document.getElementById('whatsappNumber').value.trim();
+            let warningText = document.getElementById('warningText');
+            
+            if (!name || !number) {
+                warningText.classList.remove('hidden');
+                return;
+            } else {
+                warningText.classList.add('hidden');
+            }
+            
+            let vCard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${number}\nEND:VCARD`;
+            
+            let qrContainer = document.getElementById("qrcode");
+            qrContainer.innerHTML = ""; // Clear previous QR code
+            
+            let qr = new QRCode(qrContainer, {
+                text: vCard,
+                width: 200,
+                height: 200
+            });
+            
+            setTimeout(() => {
+                let qrCanvas = document.querySelector('#qrcode canvas');
+                let qrImage = document.getElementById('qrImage');
+                if (qrCanvas) {
+                    qrImage.src = qrCanvas.toDataURL("image/png");
+                    qrImage.classList.remove('hidden');
+                    qrContainer.classList.add('hidden');
+                }
+            }, 500);
+            
+            document.getElementById('openWhatsapp').classList.remove('hidden');
+            document.getElementById('downloadQR').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
