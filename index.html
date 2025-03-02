@@ -128,74 +128,100 @@
     <p class="footer mt-6 text-lg font-semibold text-gray-400">QR WhatsApp by <a href="https://wa.me/60149358422" target="_blank" class="text-blue-400 hover:underline">Chriss Jericho</a></p>
     <p class="footer text-lg font-semibold text-gray-400"><a href="futureUP.html" target="_blank" class="text-blue-400 hover:underline">Future Update</a></p>
     <script>
-        function toggleDarkMode() {
-            document.body.classList.toggle("dark-mode");
+    function toggleDarkMode() {
+        document.body.classList.toggle("dark-mode");
+    }
+    function goToCustomQR() {
+        window.location.href = "customQR.html";
+    }
+    function generateQR() {
+        let name = document.getElementById('contactName').value.trim();
+        let number = document.getElementById('whatsappNumber').value.trim();
+        let warningText = document.getElementById('warningText');
+        
+        if (!name || !number) {
+            warningText.classList.remove('hidden');
+            return;
+        } else {
+            warningText.classList.add('hidden');
         }
-        function goToCustomQR() {
-            window.location.href = "customQR.html";
-        }
-        function generateQR() {
-            let name = document.getElementById('contactName').value.trim();
-            let number = document.getElementById('whatsappNumber').value.trim();
-            let warningText = document.getElementById('warningText');
-            
-            if (!name || !number) {
-                warningText.classList.remove('hidden');
-                return;
-            } else {
-                warningText.classList.add('hidden');
-            }
-            
-            let vCard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${number}\nEND:VCARD`;
-            
-            let qrContainer = document.getElementById("qrcode");
-            qrContainer.innerHTML = ""; // Clear previous QR code
-            
-            let qr = new QRCode(qrContainer, {
-                text: vCard,
-                width: 200,
-                height: 200
-            });
-            
-            setTimeout(() => {
-                let qrCanvas = document.querySelector('#qrcode canvas');
-                let qrImage = document.getElementById('qrImage');
-                if (qrCanvas) {
-                    qrImage.src = qrCanvas.toDataURL("image/png");
-                    qrImage.classList.remove('hidden');
-                    qrContainer.classList.add('hidden'); // Hide the canvas-based QR code
-                }
-            }, 500);
-            
-            // Show buttons
-            document.getElementById('openWhatsapp').classList.remove('hidden');
-            document.getElementById('downloadQR').classList.remove('hidden');
-        }
-
-        function openWhatsApp() {
-            let name = document.getElementById('contactName').value;
-            let number = document.getElementById('whatsappNumber').value;
-            let encodedMessage = encodeURIComponent(`${name}`);
-            
-            let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            let whatsappLink = isMobile 
-                ? `https://wa.me/${number}?text=${encodedMessage}` 
-                : `https://web.whatsapp.com/send?phone=${number}&text=${encodedMessage}`;
-            
-            window.open(whatsappLink, '_blank');
-        }
-
-        function downloadQRCode() {
+        
+        let encodedMessage = encodeURIComponent(name);
+        let whatsappLink = `https://wa.me/${number}?text=${encodedMessage}`;
+        
+        let qrContainer = document.getElementById("qrcode");
+        qrContainer.innerHTML = ""; // Clear previous QR code
+        
+        let qr = new QRCode(qrContainer, {
+            text: whatsappLink, // Make the QR code link directly to WhatsApp
+            width: 200,
+            height: 200
+        });
+        
+        setTimeout(() => {
+            let qrCanvas = document.querySelector('#qrcode canvas');
             let qrImage = document.getElementById('qrImage');
-            if (qrImage.src) {
-                let link = document.createElement('a');
-                link.href = qrImage.src;
-                link.download = "QRCode.png";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
+            if (qrCanvas) {
+                qrImage.src = qrCanvas.toDataURL("image/png");
+                qrImage.classList.remove('hidden');
+                qrContainer.classList.add('hidden'); // Hide the canvas-based QR code
             }
+        }, 500);
+        
+        // Show buttons
+        document.getElementById('openWhatsapp').classList.remove('hidden');
+        document.getElementById('downloadQR').classList.remove('hidden');
+    }
+
+    function openWhatsApp() {
+        let name = document.getElementById('contactName').value;
+        let number = document.getElementById('whatsappNumber').value;
+        let encodedMessage = encodeURIComponent(`${name}`);
+        
+        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        let whatsappLink = isMobile 
+            ? `https://wa.me/${number}?text=${encodedMessage}` 
+            : `https://web.whatsapp.com/send?phone=${number}&text=${encodedMessage}`;
+        
+        window.open(whatsappLink, '_blank');
+    }
+
+    function downloadQRCode() {
+        let qrImage = document.getElementById('qrImage');
+        if (qrImage.src) {
+            let link = document.createElement('a');
+            link.href = qrImage.src;
+            link.download = "QRCode.png";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
+    }
+
+            function openWhatsApp() {
+                let name = document.getElementById('contactName').value;
+                let number = document.getElementById('whatsappNumber').value;
+                let encodedMessage = encodeURIComponent(`${name}`);
+                
+                let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                let whatsappLink = isMobile 
+                    ? `https://wa.me/${number}?text=${encodedMessage}` 
+                    : `https://web.whatsapp.com/send?phone=${number}&text=${encodedMessage}`;
+                
+                window.open(whatsappLink, '_blank');
+            }
+
+            function downloadQRCode() {
+                let qrImage = document.getElementById('qrImage');
+                if (qrImage.src) {
+                    let link = document.createElement('a');
+                    link.href = qrImage.src;
+                    link.download = "QRCode.png";
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+            }
     </script>
 </body>
 </html>
