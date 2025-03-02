@@ -84,17 +84,35 @@
         }
         
         function downloadQRCode() {
-            let qrCanvas = document.querySelector("#qrcode canvas");
-            if (qrCanvas) {
-                let qrImage = qrCanvas.toDataURL("image/png");
-                let link = document.createElement("a");
-                link.href = qrImage;
-                link.download = "QRCode.png";
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
-        }
+    let qrCanvas = document.querySelector("#qrcode canvas");
+
+    if (qrCanvas) {
+        let padding = 20; // Add white padding around the QR code
+
+        let canvas = document.createElement("canvas");
+        let ctx = canvas.getContext("2d");
+
+        let size = qrCanvas.width; // Get the original QR code size
+        canvas.width = size + padding * 2;
+        canvas.height = size + padding * 2;
+
+        // Fill background with white
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw the QR code on top with padding
+        ctx.drawImage(qrCanvas, padding, padding, size, size);
+
+        // Convert to JPG and download
+        let link = document.createElement("a");
+        link.href = canvas.toDataURL("image/jpeg", 1.0); // Save as high-quality JPG
+        link.download = "QRCode.jpg";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+}
+
     </script>
 </body>
 </html>

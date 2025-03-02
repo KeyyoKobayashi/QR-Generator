@@ -134,94 +134,89 @@
     function goToCustomQR() {
         window.location.href = "customQR.html";
     }
-    function generateQR() {
+        function generateQR() {
         let name = document.getElementById('contactName').value.trim();
         let number = document.getElementById('whatsappNumber').value.trim();
         let warningText = document.getElementById('warningText');
-        
+
         if (!name || !number) {
             warningText.classList.remove('hidden');
             return;
         } else {
             warningText.classList.add('hidden');
         }
-        
-        let encodedMessage = encodeURIComponent(name);
-        let whatsappLink = `https://wa.me/${number}?text=${encodedMessage}`;
-        
+
+        let vCard = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${number}\nEND:VCARD`;
+
         let qrContainer = document.getElementById("qrcode");
         qrContainer.innerHTML = ""; // Clear previous QR code
-        
+
         let qr = new QRCode(qrContainer, {
-            text: whatsappLink, // Make the QR code link directly to WhatsApp
+            text: vCard,
             width: 200,
-            height: 200
+            height: 200,
+            correctLevel: QRCode.CorrectLevel.H // Better error correction
         });
-        
+
         setTimeout(() => {
             let qrCanvas = document.querySelector('#qrcode canvas');
-            let qrImage = document.getElementById('qrImage');
             if (qrCanvas) {
-                qrImage.src = qrCanvas.toDataURL("image/png");
+                let qrImage = document.getElementById('qrImage');
+                let canvas = document.createElement('canvas');
+                let ctx = canvas.getContext('2d');
+
+                // Set canvas size
+                canvas.width = qrCanvas.width;
+                canvas.height = qrCanvas.height;
+
+                // Fill white background
+                ctx.fillStyle = "#ffffff";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Draw the QR code on top
+                ctx.drawImage(qrCanvas, 0, 0);
+
+                // Convert to PNG image
+                qrImage.src = canvas.toDataURL("image/png");
                 qrImage.classList.remove('hidden');
                 qrContainer.classList.add('hidden'); // Hide the canvas-based QR code
             }
         }, 500);
-        
+
         // Show buttons
         document.getElementById('openWhatsapp').classList.remove('hidden');
         document.getElementById('downloadQR').classList.remove('hidden');
     }
+        function downloadQRCode() {
+        let qrContainer = document.getElementById("qrcode");
+        let qrImage = qrContainer.querySelector("img"); // Get the generated QR code image
 
-    function openWhatsApp() {
-        let name = document.getElementById('contactName').value;
-        let number = document.getElementById('whatsappNumber').value;
-        let encodedMessage = encodeURIComponent(`${name}`);
-        
-        let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-        let whatsappLink = isMobile 
-            ? `https://wa.me/${number}?text=${encodedMessage}` 
-            : `https://web.whatsapp.com/send?phone=${number}&text=${encodedMessage}`;
-        
-        window.open(whatsappLink, '_blank');
-    }
+        if (qrImage) {
+            let padding = 20; // Add white padding around the QR code
 
-    function downloadQRCode() {
-        let qrImage = document.getElementById('qrImage');
-        if (qrImage.src) {
+            let canvas = document.createElement('canvas');
+            let ctx = canvas.getContext('2d');
+
+            let size = qrImage.width; // Keep original QR size
+            canvas.width = size + padding * 2;
+            canvas.height = size + padding * 2;
+
+            // Fill background with white
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the QR code image on top with padding
+            ctx.drawImage(qrImage, padding, padding, size, size);
+
+            // Convert to JPG and download
             let link = document.createElement('a');
-            link.href = qrImage.src;
-            link.download = "QRCode.png";
+            link.href = canvas.toDataURL("image/jpeg", 1.0); // Convert to JPG
+            link.download = "QRCode.jpg";
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
     }
-
-            function openWhatsApp() {
-                let name = document.getElementById('contactName').value;
-                let number = document.getElementById('whatsappNumber').value;
-                let encodedMessage = encodeURIComponent(`${name}`);
-                
-                let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                let whatsappLink = isMobile 
-                    ? `https://wa.me/${number}?text=${encodedMessage}` 
-                    : `https://web.whatsapp.com/send?phone=${number}&text=${encodedMessage}`;
-                
-                window.open(whatsappLink, '_blank');
-            }
-
-            function downloadQRCode() {
-                let qrImage = document.getElementById('qrImage');
-                if (qrImage.src) {
-                    let link = document.createElement('a');
-                    link.href = qrImage.src;
-                    link.download = "QRCode.png";
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }
-            }
     </script>
 </body>
 </html>
