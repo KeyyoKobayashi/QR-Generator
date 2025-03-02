@@ -83,6 +83,17 @@
             margin-right: 10px;
             color: #ff0000;
         }
+        .update-list la {
+            font-size: 1.2rem;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        .update-list la::before {
+            content: "Updated";
+            margin-right: 10px;
+            color: #00ff04;
+        }
         .toggle-button, .back-button {
             background: linear-gradient(to right, #4b6cb7, #182848);
             padding: 12px 20px;
@@ -116,6 +127,7 @@
         <p class="update-title">🚀 Future Updates</p>
         <div class="toggle-button" onclick="toggleUpdates()">Click to View Updates</div>
         <ul id="update-list" class="update-list">
+            <la>📅 3/2/2025</la>
             <li>✨ Dark Mode Toggle</li>
             <li>🎨 Custom QR Styles</li>
             <ll>🔗 More Integrations</ll>
