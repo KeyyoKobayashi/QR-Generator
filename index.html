@@ -10,78 +10,130 @@
         body {
             background: radial-gradient(circle at 50% 40%, #222, #000);
             overflow: hidden;
-            position: relative;
+            font-family: 'Poppins', sans-serif;
+            transition: background 0.5s ease, color 0.5s ease;
         }
-        .moon {
+        .dark-mode {
+            background: #f4f4f4;
+            color: #000;
+        }
+        .dark-mode .container {
+            background: #fff;
+            color: #000;
+        }
+        .dark-mode-toggle {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 25px;
+            background: #444;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px;
+            cursor: pointer;
+            transition: background 0.5s;
+        }
+        .dark-mode-toggle .toggle-ball {
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.5s;
+        }
+        .dark-mode .dark-mode-toggle {
+            background: #ddd;
+        }
+        .dark-mode .dark-mode-toggle .toggle-ball {
+            transform: translateX(25px);
+        }
+        .moon, .sun {
             position: absolute;
             top: 10%;
             left: 50%;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle at 30% 30%, #fff, #ccc);
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .moon {
+            background: radial-gradient(circle at 30% 30%, #fff, #ccc);
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
-            transform: translateX(-50%);
-            z-index: -1;
+            transform: translateX(-50%) scale(1);
         }
-        .stars {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            z-index: -1;
+        .sun {
+            background: radial-gradient(circle at 50% 50%, #ffcc00, #ff8800);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.8);
+            transform: translateX(-50%) scale(0);
         }
-        .stars span {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            opacity: 0.8;
-            animation: twinkle 3s infinite ease-in-out alternate;
+        .dark-mode .moon {
+            transform: translateX(-50%) scale(0);
         }
+        .dark-mode .sun {
+            transform: translateX(-50%) scale(1);
+        }
+
+        
         @keyframes twinkle {
             from { opacity: 0.5; }
             to { opacity: 1; }
         }
         .moving-text {
-            position: absolute;
-            top: 10%;
-            left: 50%;
             font-size: 2rem;
             font-weight: bold;
             color: white;
-            transform: translateX(-50%);
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.3);
             animation: moveText 3s infinite alternate ease-in-out;
-            z-index: 1;
-        }
-        .moving-text span {
-            color: #25D366;
         }
         @keyframes moveText {
-            from { transform: translate(-50%, 0); }
-            to { transform: translate(-50%, 10px); }
+            from { transform: translateY(0); }
+            to { transform: translateY(10px); }
+        }
+        .custom-button {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        .custom-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
         }
     </style>
 </head>
-<body class="text-white flex flex-col justify-center items-center h-screen relative">
+<body class="text-white flex flex-col justify-center items-center min-h-screen relative p-4">
+    <div class="dark-mode-toggle" onclick="toggleDarkMode()">
+        <div class="toggle-ball"></div>
+    </div>
     <div class="moon"></div>
-    <div class="stars"></div>
-    <div class="moving-text">QR <span>WhatsApp</span></div>
-    <div class="container bg-gray-800 p-6 rounded-lg shadow-lg w-96 text-center z-10">
+    <div class="sun"></div>
+    <div class="moving-text mb-6"><span class="text-green-400">QR WhatsApp</span></div>
+    <div class="container bg-gray-900 p-6 rounded-lg shadow-xl w-full max-w-sm text-center">
         <h1 class="text-2xl font-bold mb-4">QR Code Generator</h1>
-        <input type="text" id="contactName" placeholder="Enter Contact Name" class="w-full p-2 rounded text-black mb-2" />
-        <input type="text" id="whatsappNumber" placeholder="Enter WhatsApp Number" class="w-full p-2 rounded text-black" />
+        <input type="text" id="contactName" placeholder="Enter Contact Name" class="w-full p-3 rounded-lg text-black mb-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <input type="text" id="whatsappNumber" placeholder="Enter WhatsApp Number" class="w-full p-3 rounded-lg text-black border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
         <p id="warningText" class="text-red-500 hidden text-sm mt-2">Please fill name and number before continuing</p>
-        <button onclick="generateQR()" class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Generate QR</button>
+        <button onclick="generateQR()" class="mt-4 custom-button w-full">Generate QR</button>
+        <button onclick="goToCustomQR()" class="mt-4 custom-button w-full">Custom QR</button>
         <div id="qrcode" class="mt-4 flex justify-center"></div>
         <img id="qrImage" class="hidden mt-4 mx-auto" />
-        <button id="openWhatsapp" class="hidden mt-4 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" onclick="openWhatsApp()">Open in WhatsApp</button>
-        <button id="downloadQR" class="hidden mt-4 bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded" onclick="downloadQRCode()">Download QR</button>
+        <button id="openWhatsapp" class="hidden mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg w-full transition duration-300" onclick="openWhatsApp()">Open in WhatsApp</button>
+        <button id="downloadQR" class="hidden mt-4 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg w-full transition duration-300" onclick="downloadQRCode()">Download QR</button>
     </div>
-    <p class="footer mt-6 text-lg font-semibold text-gray-400">QR Code Generator by <a href="https://wa.me/60149358422" target="_blank" class="text-blue-400 hover:underline">Chriss Jericho</a></p>
-    <a href="futureUP.html" target="_blank" class="text-blue-400 hover:underline">Future Update</a></p>
-    
+    <p class="footer mt-6 text-lg font-semibold text-gray-400">QR WhatsApp by <a href="https://wa.me/60149358422" target="_blank" class="text-blue-400 hover:underline">Chriss Jericho</a></p>
+    <p class="footer text-lg font-semibold text-gray-400"><a href="futureUP.html" target="_blank" class="text-blue-400 hover:underline">Future Update</a></p>
     <script>
+        function toggleDarkMode() {
+            document.body.classList.toggle("dark-mode");
+        }
+        function goToCustomQR() {
+            window.location.href = "customQR.html";
+        }
         function generateQR() {
             let name = document.getElementById('contactName').value.trim();
             let number = document.getElementById('whatsappNumber').value.trim();
@@ -111,12 +163,38 @@
                 if (qrCanvas) {
                     qrImage.src = qrCanvas.toDataURL("image/png");
                     qrImage.classList.remove('hidden');
-                    qrContainer.classList.add('hidden');
+                    qrContainer.classList.add('hidden'); // Hide the canvas-based QR code
                 }
             }, 500);
             
+            // Show buttons
             document.getElementById('openWhatsapp').classList.remove('hidden');
             document.getElementById('downloadQR').classList.remove('hidden');
+        }
+
+        function openWhatsApp() {
+            let name = document.getElementById('contactName').value;
+            let number = document.getElementById('whatsappNumber').value;
+            let encodedMessage = encodeURIComponent(`${name}`);
+            
+            let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            let whatsappLink = isMobile 
+                ? `https://wa.me/${number}?text=${encodedMessage}` 
+                : `https://web.whatsapp.com/send?phone=${number}&text=${encodedMessage}`;
+            
+            window.open(whatsappLink, '_blank');
+        }
+
+        function downloadQRCode() {
+            let qrImage = document.getElementById('qrImage');
+            if (qrImage.src) {
+                let link = document.createElement('a');
+                link.href = qrImage.src;
+                link.download = "QRCode.png";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
         }
     </script>
 </body>

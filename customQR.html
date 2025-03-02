@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom QR Generator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: radial-gradient(circle at 50% 40%, #222, #000);
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+        .custom-button {
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: white;
+            font-weight: bold;
+            padding: 12px 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            margin-top: 10px;
+        }
+        .custom-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-2xl font-bold mb-4">Custom QR Generator</h1>
+        <input type="text" id="customText" placeholder="Enter your URL or text" class="w-full p-3 rounded-lg text-black mb-2 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+        <button onclick="generateCustomQR()" class="custom-button">Generate QR</button>
+        <button onclick="goBack()" class="custom-button">Back</button>
+        <div id="qrcode" class="mt-4 flex justify-center"></div>
+        <button id="downloadQR" class="custom-button hidden" onclick="downloadQRCode()">Download QR</button>
+    </div>
+    <script>
+        function generateCustomQR() {
+            let text = document.getElementById("customText").value.trim();
+            if (text === "") {
+                alert("Please enter a URL or text to generate a QR code.");
+                return;
+            }
+            
+            // Ensure input is a URL, if not, make it a Google search URL
+            if (!text.startsWith("http://") && !text.startsWith("https://")) {
+                text = "https://www.google.com/search?q=" + encodeURIComponent(text);
+            }
+            
+            let qrContainer = document.getElementById("qrcode");
+            qrContainer.innerHTML = "";
+            new QRCode(qrContainer, text);
+            
+            setTimeout(() => {
+                let qrCanvas = qrContainer.querySelector("canvas");
+                if (qrCanvas) {
+                    document.getElementById("downloadQR").classList.remove("hidden");
+                }
+            }, 500);
+        }
+        
+        function goBack() {
+            window.location.href = "index.html";
+        }
+        
+        function downloadQRCode() {
+            let qrCanvas = document.querySelector("#qrcode canvas");
+            if (qrCanvas) {
+                let qrImage = qrCanvas.toDataURL("image/png");
+                let link = document.createElement("a");
+                link.href = qrImage;
+                link.download = "QRCode.png";
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+        }
+    </script>
+</body>
+</html>

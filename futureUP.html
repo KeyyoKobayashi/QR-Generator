@@ -1,57 +1,142 @@
-<style>
-    body {
-        background: linear-gradient(120deg, #1a1a2e, #16213e, #0f3460);
-        height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-        overflow: hidden;
-    }
-    .floating {
-        position: absolute;
-        width: 200px;
-        height: 200px;
-        background: radial-gradient(circle, #ffcc00, #ff6600);
-        border-radius: 50%;
-        opacity: 0.6;
-        animation: float 5s infinite alternate ease-in-out;
-    }
-    @keyframes float {
-        from { transform: translateY(-20px); }
-        to { transform: translateY(20px); }
-    }
-    .floating:nth-child(1) { top: 10%; left: 10%; animation-duration: 6s; }
-    .floating:nth-child(2) { top: 70%; left: 80%; animation-duration: 4s; }
-    .cool-text {
-        font-size: 2.5rem;
-        font-weight: bold;
-        background: linear-gradient(to right, #ffcc00, #ff6600);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 3px 3px 10px rgba(255, 204, 0, 0.5);
-    }
-</style>
-<div class="floating"></div>
-<div class="floating"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Updates</title>
+    <style>
+        body {
+            background: linear-gradient(120deg, #1a1a2e, #16213e, #0f3460);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: Arial, sans-serif;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .floating {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, #ffcc00, #ff6600);
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: float 5s infinite alternate ease-in-out;
+        }
+        @keyframes float {
+            from { transform: translateY(-20px); }
+            to { transform: translateY(20px); }
+        }
+        .floating:nth-child(1) { top: 10%; left: 10%; animation-duration: 6s; }
+        .floating:nth-child(2) { bottom: 10%; right: 10%; animation-duration: 4s; }
 
-<div class="absolute bottom-5 left-1/2 transform -translate-x-1/2 text-white text-center cursor-pointer" onclick="toggleUpdates()">
-    <p class="bg-gradient-to-r from-blue-500 to-purple-500 px-8 py-4 rounded-lg shadow-lg font-extrabold text-2xl hover:scale-110 transition-transform">🚀 Future Updates</p>
-    <div id="update-list" class="hidden mt-4 bg-gray-900 p-6 rounded-lg shadow-lg text-left w-80">
-        <ul class="list-disc list-inside text-gray-300 text-lg">
+        .update-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+        }
+        .update-container:hover {
+            transform: scale(1.05);
+        }
+        .update-title {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #ffcc00, #ff6600);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 3px 3px 10px rgba(255, 204, 0, 0.5);
+        }
+        .update-list {
+            margin-top: 15px;
+            text-align: left;
+            list-style: none;
+            padding: 0;
+        }
+        .update-list li {
+            font-size: 1.2rem;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        .update-list li::before {
+            content: "✔";
+            margin-right: 10px;
+            color: #ffcc00;
+        }
+
+        .update-list ll {
+            font-size: 1.2rem;
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        .update-list ll::before {
+            content: "X";
+            margin-right: 10px;
+            color: #ff0000;
+        }
+        .toggle-button, .back-button {
+            background: linear-gradient(to right, #4b6cb7, #182848);
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 15px;
+            display: inline-block;
+        }
+        .toggle-button:hover, .back-button:hover {
+            background: linear-gradient(to right, #ffcc00, #ff6600);
+            transform: scale(1.1);
+        }
+        #update-list {
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating"></div>
+    <div class="floating"></div>
+
+    <div class="update-container">
+        <p class="update-title">🚀 Future Updates</p>
+        <div class="toggle-button" onclick="toggleUpdates()">Click to View Updates</div>
+        <ul id="update-list" class="update-list">
             <li>✨ Dark Mode Toggle</li>
             <li>🎨 Custom QR Styles</li>
-            <li>🔗 More Integrations</li>
+            <ll>🔗 More Integrations</ll>
             <li>🖌️ Better UI Enhancements</li>
-            <li>🌍 Multi-language Support</li>
+            <ll>🌍 Multi-language Support</ll>
         </ul>
+        <div class="back-button" onclick="goBack()">⬅ Back</div>
     </div>
-</div>
 
-<script>
-    function toggleUpdates() {
-        const updateList = document.getElementById("update-list");
-        updateList.classList.toggle("hidden");
-    }
-</script>
-</body
+    <script>
+        function toggleUpdates() {
+            const updateList = document.getElementById("update-list");
+            if (updateList.style.display === "none" || updateList.style.display === "") {
+                updateList.style.display = "block";
+            } else {
+                updateList.style.display = "none";
+            }
+        }
+        
+        function goBack() {
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
