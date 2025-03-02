@@ -125,14 +125,19 @@
         <button id="openWhatsapp" class="hidden mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg w-full transition duration-300" onclick="openWhatsApp()">Open in WhatsApp</button>
         <button id="downloadQR" class="hidden mt-4 bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded-lg w-full transition duration-300" onclick="downloadQRCode()">Download QR</button>
     </div>
-    <p class="footer mt-6 text-lg font-semibold text-gray-400">QR WhatsApp by <a href="https://wa.me/60149358422" target="_blank" class="text-blue-400 hover:underline">Chriss Jericho</a></p>
-    <p class="footer text-lg font-semibold text-gray-400"><a href="futureUP.html" target="_blank" class="text-blue-400 hover:underline">Future Update</a></p>
+    <p class="footer mt-6 text-lg font-semibold text-gray-400">QR WhatsApp by <a href="https://wa.me/60149358422" target="_blank" class="text-blue-400 hover:underline">CHRISS JERICHO</a></p>
+    <div>
+        <button onclick="goTofutureUP()" class="mt-4 custom-button w-full">Future Update</button>
+    </div>
     <script>
     function toggleDarkMode() {
         document.body.classList.toggle("dark-mode");
     }
     function goToCustomQR() {
         window.location.href = "customQR.html";
+    }
+    function goTofutureUP() {
+        window.location.href = "futureUP.html";
     }
         function generateQR() {
         let name = document.getElementById('contactName').value.trim();
